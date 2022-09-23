@@ -2,14 +2,17 @@ def charPosition(c):
     c = c.lower()
     return ord(c) - ord("a")
 
+
 def positionChar(i):
     az = "abcdefghijklmnopqrstuvwxyz"
     return az[i]
+
 
 class TrieNode:
     def __init__(self):
         self.children = [None] * 26
         self.end = False
+
 
 class Trie:
     def __init__(self):
@@ -40,6 +43,31 @@ class Trie:
                 return False
             curr = curr.children[charPos]
         return True
+
+    def fuzzySearch(self, word):
+        from collections import deque  # deque only used in this function
+
+        queue = deque([self.root])
+        for char in word:
+            newNodes = []
+            if char == ".":
+                while queue:
+                    node = queue.popleft()
+                    for child in node.children:
+                        if child != None:
+                            newNodes.append(child)
+            else:
+                charPos = charPosition(char)
+                while queue:
+                    node = queue.popleft()
+                    if node.children[charPos] != None:
+                        newNodes.append(node.children[charPos])
+            queue.extend(newNodes)
+        while queue:
+            node = queue.popleft()
+            if node.end:
+                return True
+        return False
 
     def listWords(self, prefix=""):
         words = []
