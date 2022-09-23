@@ -27,11 +27,10 @@ class Trie:
     def addManyWords(self, words):
         for word in words:
             self.addWord(word)
-        
+
     def addSentenceWords(self, sentence):
         words = sentence.split(" ")
         self.addManyWords(words)
-
 
     def searchWord(self, pre):
         curr = self.root
@@ -42,18 +41,19 @@ class Trie:
             curr = curr.children[charPos]
         return True
 
-    def listWords(self, prefix = ""):
+    def listWords(self, prefix=""):
         words = []
         curr = self.root
+
         def dfs(currChar, currStr):
             nonlocal words
             for i, node in enumerate(currChar.children):
                 if node != None:
                     char = positionChar(i)
                     if node.end == True:
-                        words.append(currStr+char)
-                    dfs(node, currStr+char)
-        
+                        words.append(currStr + char)
+                    dfs(node, currStr + char)
+
         if prefix != "":
             for c in prefix:
                 charPos = charPosition(c)
@@ -63,7 +63,6 @@ class Trie:
 
         dfs(curr, prefix)
 
-        
         if not words:
             if prefix != "":
                 return [f"No words with given prefix: {prefix}"]
@@ -71,4 +70,3 @@ class Trie:
                 return [f"No words in trie as of yet"]
         else:
             return words
-        
